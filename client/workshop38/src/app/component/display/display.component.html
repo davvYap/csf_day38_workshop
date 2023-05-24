@@ -1,0 +1,48 @@
+<div class="flex">
+  <h1 class="center">Looking Good 😍</h1>
+  <img src="{{ image }}" alt="" class="capture" />
+
+  <form [formGroup]="form" (submit)="upload()" class="example-form center">
+    <mat-form-field class="example-full-width" color="warn">
+      <mat-label>Leave a comment</mat-label>
+      <textarea
+        matInput
+        placeholder="Enter comment about this pic..."
+        formControlName="comments"
+      ></textarea>
+    </mat-form-field>
+    <!-- <textarea
+      class="comments"
+      name="comments"
+      id=""
+      cols="30"
+      rows="5"
+      placeholder="Enter comment about this pic..."
+      formControlName="comments"
+    ></textarea> -->
+    <div class="flex-button">
+      <div>
+        <button
+          type="button"
+          mat-raised-button
+          color="primary"
+          (click)="back()"
+        >
+          <mat-icon fontIcon="close"></mat-icon>
+          Cancel
+        </button>
+      </div>
+      <div>
+        <button
+          type="submit"
+          mat-raised-button
+          color="accent"
+          [disabled]="form.invalid"
+        >
+          <mat-icon fontIcon="upload"></mat-icon>
+          Upload
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

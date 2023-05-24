@@ -1,0 +1,62 @@
+<h1 class="center">Upload your photo 🖼️</h1>
+
+<div class="flex">
+  <form class="example-form" [formGroup]="form" (submit)="uploadPic()">
+    <table>
+      <tr>
+        <td>
+          <input type="file" #file />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <mat-form-field class="example-full-width" color="warn">
+            <mat-label>Leave a comment</mat-label>
+            <textarea
+              matInput
+              placeholder="Ex. It makes me feel..."
+              formControlName="comments"
+            ></textarea>
+          </mat-form-field>
+        </td>
+      </tr>
+
+      <tr class="center">
+        <td class="flex-button">
+          <button
+            type="button"
+            mat-raised-button
+            color="accent"
+            class="space"
+            (click)="done()"
+          >
+            <mat-icon fontIcon="done_outline"></mat-icon>
+            Done
+          </button>
+          <button
+            type="submit"
+            mat-raised-button
+            color="warn"
+            [disabled]="formInvalid()"
+            class="space"
+          >
+            <mat-icon fontIcon="send"></mat-icon>
+            Post
+          </button>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+  <div *ngIf="uploadMessage$ | async as message; else noMessage" class="center">
+    <mat-card class="space">
+      <mat-card-content>{{ message | json }}</mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<ng-template #noMessage>
+  <mat-card class="space">
+    <mat-card-content>No Image Uploaded</mat-card-content>
+  </mat-card>
+</ng-template>

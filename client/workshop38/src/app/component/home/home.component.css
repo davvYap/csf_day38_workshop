@@ -1,0 +1,13 @@
+.center {
+  margin: 10vh;
+  text-align: center;
+  font-weight: 500;
+  font-family: monospace;
+}
+
+.flex {
+  margin: 10vh;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}

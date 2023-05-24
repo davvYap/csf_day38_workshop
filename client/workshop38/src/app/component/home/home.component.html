@@ -1,0 +1,20 @@
+<h1 class="center">Take a selfie 😁</h1>
+<div class="flex">
+  <div>
+    <button
+      mat-raised-button
+      color="primary"
+      type="button"
+      (click)="toUpload()"
+    >
+      Upload Photo
+      <mat-icon fontIcon="cloud_upload"></mat-icon>
+    </button>
+  </div>
+  <div>
+    <button mat-raised-button color="accent" type="button" (click)="toSnap()">
+      Snap Photo
+      <mat-icon fontIcon="add_a_photo"></mat-icon>
+    </button>
+  </div>
+</div>
