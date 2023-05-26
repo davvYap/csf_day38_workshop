@@ -45,6 +45,8 @@ export class UploadComponent implements OnInit {
       this.form.value.comments,
       this.file.nativeElement.files[0]
     );
+    this.form.reset();
+    this.file.nativeElement.value = '';
   }
 
   formInvalid(): boolean {
@@ -52,6 +54,6 @@ export class UploadComponent implements OnInit {
   }
 
   done(): void {
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
 }

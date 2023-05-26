@@ -2,7 +2,22 @@
   <div
     class="row justify-content-center align-items-center g-2 text-center m-5"
   >
-    <div class="col-8"><img [src]="getImageSrc()" alt="image" /></div>
+    <div *ngIf="getImageSrc(); else noImage" class="col-8">
+      <img [src]="getImageSrc()" alt="image" class="img-fluid" />
+    </div>
+  </div>
+  <div
+    class="row justify-content-center align-items-center g-2 text-center m-5"
+  >
+    <button
+      class="col-2"
+      type="button"
+      mat-raised-button
+      color="accent"
+      (click)="back()"
+    >
+      Back
+    </button>
   </div>
 
   <!-- <div
@@ -12,6 +27,6 @@
       <p>{{ i.image }}</p>
     </div>
   </div> -->
-
-  <ng-template #noImage> No Image ! </ng-template>
 </div>
+
+<ng-template #noImage> No Image ! </ng-template>

@@ -5,6 +5,7 @@ import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.json.Json;
+import jakarta.json.JsonObject;
 import sg.edu.nus.iss.workshop38.service.ImageService;
 
 @Controller
@@ -29,8 +31,8 @@ public class ImageController {
     @PostMapping(path = "/upload")
     public ResponseEntity<String> uploadImage(@RequestPart String comments, @RequestPart MultipartFile file) {
         try {
-            URL url = imgSvc.uploadImage(comments, file);
-            System.out.println("URL from S3 >>> " + url);
+            String key = imgSvc.uploadImage(comments, file);
+            imgSvc.insertImageUser("david", key, comments);
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -48,4 +50,16 @@ public class ImageController {
         System.out.println("json >>> " + imgSvc.getImages(bucketKey).getBody());
         return imgSvc.getImages(bucketKey);
     }
+
+    @GetMapping(path = "/login")
+    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
+
+        boolean isLogin = imgSvc.verifyUser(username, password);
+        JsonObject res = Json.createObjectBuilder().add("login", isLogin).build();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(res.toString());
+    }
+
 }

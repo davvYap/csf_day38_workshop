@@ -1,0 +1,49 @@
+<div class="container-fluid">
+  <div class="row justify-content-center align-items-center g-2 text-center">
+    <div class="col-8 text-center">
+      <form (ngSubmit)="login()" [formGroup]="form" class="example-form center">
+        <table class="text-center">
+          <tr class="text-center">
+            <td>
+              <mat-form-field class="example-full-width" color="primary">
+                <mat-label>Username </mat-label>
+                <input
+                  type="text"
+                  matInput
+                  placeholder="fred"
+                  formControlName="username"
+                />
+              </mat-form-field>
+            </td>
+          </tr>
+
+          <tr class="text-center">
+            <td>
+              <mat-form-field class="example-full-width" color="primary">
+                <mat-label>Password </mat-label>
+                <input type="password" matInput formControlName="password" />
+              </mat-form-field>
+            </td>
+          </tr>
+
+          <tr *ngIf="!notAuthenicated" class="text-center">
+            <td>
+              <code class="red">Wrong Credentials</code>
+            </td>
+          </tr>
+        </table>
+        <div class="submit-button">
+          <button
+            type="submit"
+            mat-raised-button
+            color="accent"
+            [disabled]="form.invalid"
+          >
+            <mat-icon fontIcon="key"></mat-icon>
+            Login
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

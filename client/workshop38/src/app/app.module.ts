@@ -13,6 +13,7 @@ import { MaterialModule } from './material.module';
 import { HomeComponent } from './component/home/home.component';
 import { UploadComponent } from './component/upload/upload.component';
 import { PhotoComponent } from './component/photo/photo.component';
+import { LoginComponent } from './component/login/login.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { PhotoComponent } from './component/photo/photo.component';
     HomeComponent,
     UploadComponent,
     PhotoComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,

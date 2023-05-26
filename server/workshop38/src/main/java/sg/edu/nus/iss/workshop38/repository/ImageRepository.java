@@ -1,10 +1,17 @@
 package sg.edu.nus.iss.workshop38.repository;
 
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,14 +26,19 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import sg.edu.nus.iss.workshop38.model.Image;
+import sg.edu.nus.iss.workshop38.model.UserImage;
 
 import java.util.Map;
 import java.util.UUID;
 import java.io.IOException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+
+import static sg.edu.nus.iss.workshop38.repository.DBQueries.*;
 
 @Repository
 public class ImageRepository {
@@ -35,9 +47,16 @@ public class ImageRepository {
     private AmazonS3 s3;
 
     @Autowired
+    private MongoTemplate mongo;
+
+    @Autowired
+    private JdbcTemplate jdbc;
+
+    @Autowired
     private RedisTemplate redis;
 
-    public URL uploadImage(String comments, MultipartFile file) throws IOException {
+    // S3
+    public String uploadImage(String comments, MultipartFile file) throws IOException {
         // construct custom MetaData
         Map<String, String> userdata = new HashMap<>();
         userdata.put("comments", comments);
@@ -60,9 +79,10 @@ public class ImageRepository {
                 metadata);
         putReq = putReq.withCannedAcl(CannedAccessControlList.PublicRead);
         s3.putObject(putReq);
-        return s3.getUrl("ddavv", key);
+        return key;
     }
 
+    // S3
     public ResponseEntity<String> getImages(String key) throws IOException {
 
         try {
@@ -102,4 +122,60 @@ public class ImageRepository {
                 .add("image", base64)
                 .build();
     }
+
+    // MONGO
+    public void insertImageUser(String username, String photoKey, String comments) {
+
+        Document existingUserDoc = getImageUser(username);
+
+        if (existingUserDoc == null) {
+            Image image = new Image(photoKey, comments);
+            List<Image> imageList = new ArrayList<>();
+            imageList.add(image);
+            UserImage userImage = new UserImage(username, imageList);
+            Document d = Document.parse(userImage.toJsonObject().toString());
+            mongo.insert(d, "user");
+            return;
+        }
+
+        UserImage userImage = UserImage.convertFromDocument(existingUserDoc);
+        Image newImg = new Image(photoKey, comments);
+        List<Image> imgList = userImage.getImages();
+        List<Image> newImgList = new ArrayList<>();
+
+        for (Image img : imgList) {
+            newImgList.add(img);
+        }
+        newImgList.add(newImg);
+        userImage.setImages(newImgList);
+
+        List<Document> newImgDocumentList = newImgList.stream()
+                .map(img -> Document.parse(img.toJsonObjectBuilder().build().toString()))
+                .toList();
+
+        Query q = Query.query(Criteria.where("username").is(username));
+
+        Update updateOps = new Update()
+                .set("username", username)
+                .set("images", newImgDocumentList);
+
+        mongo.updateMulti(q, updateOps, Document.class, "user");
+        return;
+    }
+
+    // MONGO
+    public Document getImageUser(String username) {
+        Query q = Query.query(Criteria.where("username").is(username));
+        return mongo.findOne(q, Document.class, "user");
+    }
+
+    // SQL
+    public boolean verifyUser(String username, String password) {
+        SqlRowSet rs = jdbc.queryForRowSet(SQL_VERIFY_USER, username, password);
+        if (rs.next()) {
+            return true;
+        }
+        return false;
+    }
+
 }

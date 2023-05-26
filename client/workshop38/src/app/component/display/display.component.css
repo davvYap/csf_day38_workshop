@@ -56,3 +56,8 @@
   border: 1px solid grey;
   border-radius: 5px;
 }
+
+.red {
+  color: red;
+  font-weight: bold;
+}

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { imageJson } from 'src/app/models';
 import { GetService } from 'src/app/service/get.service';
@@ -11,8 +12,8 @@ import { GetService } from 'src/app/service/get.service';
 export class PhotoComponent implements OnInit {
   image$!: Subscription;
   image!: string;
-  key: string = 'b3e77264';
-  constructor(private getSvc: GetService) {}
+  key: string = '95aaa2d3';
+  constructor(private getSvc: GetService, private router: Router) {}
   ngOnInit(): void {
     this.image$ = this.getSvc
       .getImage(this.key)
@@ -23,5 +24,9 @@ export class PhotoComponent implements OnInit {
 
   getImageSrc(): string {
     return this.image;
+  }
+
+  back() {
+    this.router.navigate(['/home']);
   }
 }

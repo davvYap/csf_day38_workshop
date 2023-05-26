@@ -1,7 +1,7 @@
 package sg.edu.nus.iss.workshop38.service;
 
 import java.io.IOException;
-import java.net.URL;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,12 +15,20 @@ public class ImageService {
     @Autowired
     private ImageRepository imgRepo;
 
-    public URL uploadImage(String comments, MultipartFile file) throws IOException {
+    public String uploadImage(String comments, MultipartFile file) throws IOException {
         return imgRepo.uploadImage(comments, file);
     }
 
     public ResponseEntity<String> getImages(String key) throws IOException {
         return imgRepo.getImages(key);
+    }
+
+    public void insertImageUser(String username, String photoKey, String comments) {
+        imgRepo.insertImageUser(username, photoKey, comments);
+    }
+
+    public boolean verifyUser(String username, String password) {
+        return imgRepo.verifyUser(username, password);
     }
 
 }
