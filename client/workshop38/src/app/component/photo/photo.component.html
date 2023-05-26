@@ -1,11 +1,34 @@
 <div class="container-fluid">
+  <!-- row 1 -->
   <div
     class="row justify-content-center align-items-center g-2 text-center m-5"
   >
-    <div *ngIf="getImageSrc(); else noImage" class="col-8">
-      <img [src]="getImageSrc()" alt="image" class="img-fluid" />
+    <div class="col-2">
+      <button
+        type="button"
+        mat-raised-button
+        color="primary"
+        (click)="prevImg()"
+      >
+        <
+      </button>
+    </div>
+    <div *ngIf="getImageSrc(); else noImage" class="col-6 img-container">
+      <img [src]="getImageSrc()" alt="image" class="img-fluid img-result" />
+    </div>
+    <div class="col-2">
+      <button
+        type="button"
+        mat-raised-button
+        color="primary"
+        (click)="nextImg()"
+      >
+        >
+      </button>
     </div>
   </div>
+
+  <!-- row 2 -->
   <div
     class="row justify-content-center align-items-center g-2 text-center m-5"
   >
@@ -16,17 +39,10 @@
       color="accent"
       (click)="back()"
     >
+      <mat-icon fontIcon="arrow_back_ios_new"></mat-icon>
       Back
     </button>
   </div>
-
-  <!-- <div
-    class="row justify-content-center align-items-center g-2 text-center m-5"
-  >
-    <div class="col-8" *ngIf="image$ | async as i; else noImage">
-      <p>{{ i.image }}</p>
-    </div>
-  </div> -->
 </div>
 
 <ng-template #noImage> No Image ! </ng-template>

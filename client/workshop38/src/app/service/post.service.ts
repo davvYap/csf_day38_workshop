@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, firstValueFrom } from 'rxjs';
+import { LoginService } from './login.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private loginSvc: LoginService) {}
 
   image: string = '';
 
@@ -38,6 +39,7 @@ export class PostService {
     const formData = new FormData();
     formData.set('comments', comments);
     formData.set('file', imageBlob);
+    formData.set('username', this.loginSvc.getUsername());
     firstValueFrom(
       this.http.post<string>('http://localhost:8080/upload', formData)
     )
@@ -49,6 +51,7 @@ export class PostService {
     const formData = new FormData();
     formData.set('comments', comments);
     formData.set('file', file);
+    formData.set('username', this.loginSvc.getUsername());
     return this.http.post<string>('http://localhost:8080/upload', formData);
   }
 }

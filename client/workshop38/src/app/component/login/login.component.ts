@@ -33,7 +33,9 @@ export class LoginComponent implements OnInit {
     const password = this.form.get('password')?.value;
     this.loginSvc.verifyLogin(username, password).subscribe((res) => {
       this.loginSvc.isLogin = res.login;
+      this.loginSvc.username = username;
       this.notAuthenicated = res.login;
+      this.loginSvc.isLogin$.next(res.login);
       console.log('login >>>> ', this.notAuthenicated);
       this.router.navigate(['/home']);
     });

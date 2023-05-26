@@ -126,7 +126,7 @@ public class ImageRepository {
     // MONGO
     public void insertImageUser(String username, String photoKey, String comments) {
 
-        Document existingUserDoc = getImageUser(username);
+        Document existingUserDoc = getUserImage(username);
 
         if (existingUserDoc == null) {
             Image image = new Image(photoKey, comments);
@@ -164,7 +164,7 @@ public class ImageRepository {
     }
 
     // MONGO
-    public Document getImageUser(String username) {
+    public Document getUserImage(String username) {
         Query q = Query.query(Criteria.where("username").is(username));
         return mongo.findOne(q, Document.class, "user");
     }

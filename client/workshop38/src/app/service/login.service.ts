@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { loginJson } from '../models';
 
 @Injectable({
@@ -8,6 +8,10 @@ import { loginJson } from '../models';
 })
 export class LoginService {
   isLogin: boolean = false;
+
+  isLogin$ = new Subject<boolean>();
+
+  username!: string;
 
   constructor(private http: HttpClient) {}
 
@@ -23,5 +27,9 @@ export class LoginService {
 
   logout() {
     this.isLogin = false;
+  }
+
+  getUsername() {
+    return this.username;
   }
 }

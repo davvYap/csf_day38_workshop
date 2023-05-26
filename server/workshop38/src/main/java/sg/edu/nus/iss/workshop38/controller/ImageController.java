@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import sg.edu.nus.iss.workshop38.model.UserImage;
 import sg.edu.nus.iss.workshop38.service.ImageService;
 
 @Controller
@@ -29,10 +31,11 @@ public class ImageController {
     private ImageService imgSvc;
 
     @PostMapping(path = "/upload")
-    public ResponseEntity<String> uploadImage(@RequestPart String comments, @RequestPart MultipartFile file) {
+    public ResponseEntity<String> uploadImage(@RequestPart String comments, @RequestPart MultipartFile file,
+            @RequestPart String username) {
         try {
             String key = imgSvc.uploadImage(comments, file);
-            imgSvc.insertImageUser("david", key, comments);
+            imgSvc.insertImageUser(username, key, comments);
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -60,6 +63,27 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(res.toString());
+    }
+
+    @GetMapping(path = "/userImage")
+    public ResponseEntity<String> getUserImage(@RequestParam String username) {
+
+        UserImage userImage = imgSvc.getUserImage(username);
+
+        if (userImage == null) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Json.createObjectBuilder()
+                            .add("username", "not found")
+                            .build().toString());
+        }
+
+        JsonObject result = userImage.toJsonObject();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(result.toString());
     }
 
 }
