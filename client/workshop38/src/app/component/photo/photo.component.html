@@ -1,0 +1,17 @@
+<div class="container-fluid">
+  <div
+    class="row justify-content-center align-items-center g-2 text-center m-5"
+  >
+    <div class="col-8"><img [src]="getImageSrc()" alt="image" /></div>
+  </div>
+
+  <!-- <div
+    class="row justify-content-center align-items-center g-2 text-center m-5"
+  >
+    <div class="col-8" *ngIf="image$ | async as i; else noImage">
+      <p>{{ i.image }}</p>
+    </div>
+  </div> -->
+
+  <ng-template #noImage> No Image ! </ng-template>
+</div>

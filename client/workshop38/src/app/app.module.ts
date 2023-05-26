@@ -12,9 +12,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { HomeComponent } from './component/home/home.component';
 import { UploadComponent } from './component/upload/upload.component';
+import { PhotoComponent } from './component/photo/photo.component';
 
 @NgModule({
-  declarations: [AppComponent, DisplayComponent, CameraComponent, HomeComponent, UploadComponent],
+  declarations: [
+    AppComponent,
+    DisplayComponent,
+    CameraComponent,
+    HomeComponent,
+    UploadComponent,
+    PhotoComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,

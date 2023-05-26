@@ -16,4 +16,8 @@ export class HomeComponent {
   toUpload() {
     this.router.navigate(['/upload']);
   }
+
+  getPhoto() {
+    this.router.navigate(['/photo']);
+  }
 }

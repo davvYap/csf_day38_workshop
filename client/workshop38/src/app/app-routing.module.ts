@@ -4,12 +4,14 @@ import { CameraComponent } from './component/camera/camera.component';
 import { DisplayComponent } from './component/display/display.component';
 import { HomeComponent } from './component/home/home.component';
 import { UploadComponent } from './component/upload/upload.component';
+import { PhotoComponent } from './component/photo/photo.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, title: 'Home' },
   { path: 'camera', component: CameraComponent, title: 'Camera' },
   { path: 'display', component: DisplayComponent, title: 'Display' },
   { path: 'upload', component: UploadComponent, title: 'Upload' },
+  { path: 'photo', component: PhotoComponent, title: 'Photo' },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
 
