@@ -39,7 +39,7 @@ const routes: Routes = [
     path: 'photo',
     component: PhotoComponent,
     title: `Photo`,
-    canActivate: [loginGuard],
+    // canActivate: [loginGuard],
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

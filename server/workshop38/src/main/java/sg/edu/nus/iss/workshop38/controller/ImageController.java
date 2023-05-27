@@ -5,6 +5,7 @@ import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,13 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.Response;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import sg.edu.nus.iss.workshop38.model.ImageLikes;
 import sg.edu.nus.iss.workshop38.model.UserImage;
 import sg.edu.nus.iss.workshop38.service.ImageService;
 
 @Controller
-@RequestMapping
+@RequestMapping(path = "/api")
 @CrossOrigin(origins = "*")
 public class ImageController {
 
@@ -50,7 +54,7 @@ public class ImageController {
     @GetMapping(path = "/image")
     public ResponseEntity<String> getImage(@RequestParam String key) throws IOException {
         String bucketKey = "images/%s".formatted(key);
-        System.out.println("json >>> " + imgSvc.getImages(bucketKey).getBody());
+        // System.out.println("json >>> " + imgSvc.getImages(bucketKey).getBody());
         return imgSvc.getImages(bucketKey);
     }
 
@@ -84,6 +88,33 @@ public class ImageController {
                 .status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(result.toString());
+    }
+
+    @PostMapping(path = "/likes")
+    public ResponseEntity<String> likeImage(@RequestBody String payload) throws IOException {
+
+        ImageLikes imgLikes = ImageLikes.convertFromJson(payload);
+        imgSvc.insertImageLikes(imgLikes.getKey(), imgLikes.getLikes(), imgLikes.getUnlikes());
+        JsonObject jsObj = Json.createObjectBuilder().add("status", "success").build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(jsObj.toString());
+    }
+
+    @GetMapping(path = "/likes")
+    public ResponseEntity<String> getLikes(@RequestParam String key) throws IOException {
+        ImageLikes imgLikes = imgSvc.getImageLikes(key);
+        if (imgLikes == null) {
+            ImageLikes newImgLikes = new ImageLikes(key, 0, 0);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(newImgLikes.toJsonObject().toString());
+
+        }
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(imgLikes.toJsonObject().toString());
     }
 
 }

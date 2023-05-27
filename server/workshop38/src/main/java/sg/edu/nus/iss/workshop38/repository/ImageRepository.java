@@ -27,9 +27,11 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import sg.edu.nus.iss.workshop38.model.Image;
+import sg.edu.nus.iss.workshop38.model.ImageLikes;
 import sg.edu.nus.iss.workshop38.model.UserImage;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,7 +55,7 @@ public class ImageRepository {
     private JdbcTemplate jdbc;
 
     @Autowired
-    private RedisTemplate redis;
+    private RedisTemplate<String, String> redis;
 
     // S3
     public String uploadImage(String comments, MultipartFile file) throws IOException {
@@ -178,4 +180,15 @@ public class ImageRepository {
         return false;
     }
 
+    // REDIS
+    public void insertImageLikes(String key, int likes, int unlikes) {
+        ImageLikes imgLikes = new ImageLikes(key, likes, unlikes);
+        redis.opsForValue().set(key, imgLikes.toJsonObject().toString());
+    }
+
+    // REDIS
+    public Optional<ImageLikes> getImageLikes(String key) throws IOException {
+        ImageLikes imgLikes = ImageLikes.convertFromJson(redis.opsForValue().get(key));
+        return Optional.ofNullable(imgLikes);
+    }
 }

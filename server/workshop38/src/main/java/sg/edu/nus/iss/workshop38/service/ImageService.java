@@ -1,6 +1,7 @@
 package sg.edu.nus.iss.workshop38.service;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import sg.edu.nus.iss.workshop38.model.ImageLikes;
 import sg.edu.nus.iss.workshop38.model.UserImage;
 import sg.edu.nus.iss.workshop38.repository.ImageRepository;
 
@@ -41,6 +43,18 @@ public class ImageService {
         }
         UserImage userImage = UserImage.convertFromDocument(d);
         return userImage;
+    }
+
+    public void insertImageLikes(String key, int likes, int unlikes) {
+        imgRepo.insertImageLikes(key, likes, unlikes);
+    }
+
+    public ImageLikes getImageLikes(String key) throws IOException {
+        Optional<ImageLikes> result = imgRepo.getImageLikes(key);
+        if (result.isEmpty()) {
+            return null;
+        }
+        return result.get();
     }
 
 }

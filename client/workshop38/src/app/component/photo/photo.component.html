@@ -1,7 +1,8 @@
 <div class="container-fluid">
   <!-- row 1 -->
   <div
-    class="row justify-content-center align-items-center g-2 text-center m-5"
+    *ngIf="images.length > 0; else noImage"
+    class="row justify-content-center align-items-center g-2 text-center m-3"
   >
     <div class="col-2">
       <button
@@ -13,7 +14,7 @@
         <
       </button>
     </div>
-    <div *ngIf="getImageSrc(); else noImage" class="col-6 img-container">
+    <div *ngIf="getImageSrc(); else loading" class="col-6 img-container">
       <img [src]="getImageSrc()" alt="image" class="img-fluid img-result" />
     </div>
     <div class="col-2">
@@ -27,13 +28,48 @@
       </button>
     </div>
   </div>
-
   <!-- row 2 -->
+  <div
+    *ngIf="images.length > 0"
+    class="row justify-content-center align-items-center text-center"
+  >
+    <div class="col-1">
+      <button type="button" mat-icon-button (click)="like()">👍</button>
+    </div>
+
+    <div class="col-1">
+      <button type="button" mat-icon-button (click)="unlike()">👎</button>
+    </div>
+  </div>
+
+  <!-- row 3 -->
+  <div
+    *ngIf="images.length > 0"
+    class="row justify-content-center align-items-center g-2 text-center m-3"
+  >
+    <div class="col-4 comments">
+      <mat-card>
+        <mat-card-content>{{ comments }} </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-2 comments">
+      <mat-card>
+        <mat-card-content>Likes: {{ likes }} </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="col-2 comments">
+      <mat-card>
+        <mat-card-content>Unlikes: {{ unlikes }} </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- row 4 -->
   <div
     class="row justify-content-center align-items-center g-2 text-center m-5"
   >
     <button
-      class="col-2"
+      class="col-1"
       type="button"
       mat-raised-button
       color="accent"
@@ -45,4 +81,11 @@
   </div>
 </div>
 
-<ng-template #noImage> No Image ! </ng-template>
+<ng-template #loading> <mat-spinner></mat-spinner></ng-template>
+<ng-template #noImage>
+  <div
+    class="row justify-content-center align-items-center g-2 text-center m-5"
+  >
+    <code>Your space is empty...</code>
+  </div>
+</ng-template>

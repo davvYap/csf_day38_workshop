@@ -15,3 +15,9 @@ export interface userImage {
   username: string;
   images: image[];
 }
+
+export interface imageLikes {
+  key: string;
+  likes: number;
+  unlikes: number;
+}

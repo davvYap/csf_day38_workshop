@@ -20,7 +20,7 @@ export class LoginService {
       .set('username', username)
       .set('password', password);
 
-    return this.http.get<loginJson>('http://localhost:8080/login', {
+    return this.http.get<loginJson>('http://localhost:8080/api/login', {
       params: userParams,
     });
   }
