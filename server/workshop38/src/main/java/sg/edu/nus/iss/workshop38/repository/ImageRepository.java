@@ -6,7 +6,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +28,22 @@ import com.amazonaws.services.s3.model.S3ObjectInputStream;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import redis.clients.jedis.params.ScanParams;
+import redis.clients.jedis.resps.ScanResult;
 import sg.edu.nus.iss.workshop38.model.Image;
 import sg.edu.nus.iss.workshop38.model.ImageLikes;
 import sg.edu.nus.iss.workshop38.model.UserImage;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import static sg.edu.nus.iss.workshop38.repository.DBQueries.*;
@@ -190,5 +196,39 @@ public class ImageRepository {
     public Optional<ImageLikes> getImageLikes(String key) throws IOException {
         ImageLikes imgLikes = ImageLikes.convertFromJson(redis.opsForValue().get(key));
         return Optional.ofNullable(imgLikes);
+    }
+
+    // REDIS
+    // public List<String> getImageKeysFromRedis() {
+    // List<String> keys = new ArrayList<>();
+
+    // String pattern = "*";
+
+    // // Specify the number of keys to retrieve per scan iteration
+    // int count = 100;
+
+    // ScanOptions scanOptions =
+    // ScanOptions.scanOptions().match(pattern).count(count).build();
+
+    // Cursor<String> cursor = ((RedisTemplate<String, String>)
+    // redis.opsForCluster()).scan(scanOptions);
+
+    // while (cursor.hasNext()) {
+    // String key = cursor.next();
+    // keys.add(key);
+    // }
+    // cursor.close();
+    // return keys;
+    // }
+
+    public List<String> getImageKeysFromRedis() {
+        Set<String> redisKeys = redis.keys("*");
+        List<String> keyList = new ArrayList<>();
+        Iterator<String> it = redisKeys.iterator();
+        while (it.hasNext()) {
+            String key = it.next();
+            keyList.add(key);
+        }
+        return keyList;
     }
 }

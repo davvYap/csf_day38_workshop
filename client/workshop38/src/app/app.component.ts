@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from './service/login.service';
+import { imageRepository } from './repository/image.repository';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,11 @@ export class AppComponent implements OnInit {
 
   isLogin: boolean = false;
 
-  constructor(private router: Router, private loginSvc: LoginService) {}
+  constructor(
+    private router: Router,
+    private loginSvc: LoginService,
+    private imgRepo: imageRepository
+  ) {}
 
   ngOnInit(): void {
     this.loginSvc.isLogin$.subscribe((res) => {
@@ -21,6 +26,7 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
+    this.imgRepo.deleteUser(this.loginSvc.getUsername());
     this.loginSvc.logout();
     this.isLogin = false;
     this.router.navigate(['']);

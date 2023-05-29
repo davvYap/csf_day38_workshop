@@ -1,6 +1,7 @@
 package sg.edu.nus.iss.workshop38.service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import org.bson.Document;
@@ -55,6 +56,10 @@ public class ImageService {
             return null;
         }
         return result.get();
+    }
+
+    public List<String> getImageKeysFromRedis() {
+        return imgRepo.getImageKeysFromRedis();
     }
 
 }

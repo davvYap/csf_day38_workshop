@@ -3,7 +3,7 @@ export interface imageJson {
 }
 
 export interface loginJson {
-  login: boolean;
+  isLogin: boolean;
 }
 
 export interface image {
@@ -20,4 +20,9 @@ export interface imageLikes {
   key: string;
   likes: number;
   unlikes: number;
+}
+
+export interface userInfo {
+  userId: string;
+  username: string;
 }

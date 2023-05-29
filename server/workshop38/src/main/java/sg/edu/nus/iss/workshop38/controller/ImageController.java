@@ -1,11 +1,9 @@
 package sg.edu.nus.iss.workshop38.controller;
 
 import java.io.IOException;
-import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.amazonaws.Response;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -62,7 +58,7 @@ public class ImageController {
     public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
 
         boolean isLogin = imgSvc.verifyUser(username, password);
-        JsonObject res = Json.createObjectBuilder().add("login", isLogin).build();
+        JsonObject res = Json.createObjectBuilder().add("isLogin", isLogin).build();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -115,6 +111,14 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(imgLikes.toJsonObject().toString());
+    }
+
+    @GetMapping(path = "/keys")
+    public ResponseEntity<String> getKeys() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(imgSvc.getImageKeysFromRedis().toString());
+
     }
 
 }

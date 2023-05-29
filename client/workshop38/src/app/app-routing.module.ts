@@ -1,4 +1,4 @@
-import { NgModule, inject } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CameraComponent } from './component/camera/camera.component';
 import { DisplayComponent } from './component/display/display.component';
@@ -7,39 +7,38 @@ import { UploadComponent } from './component/upload/upload.component';
 import { PhotoComponent } from './component/photo/photo.component';
 import { LoginComponent } from './component/login/login.component';
 import { loginGuard } from './util';
-import { LoginService } from './service/login.service';
 
 const routes: Routes = [
   { path: '', component: LoginComponent, title: 'Login' },
   {
     path: 'home',
     component: HomeComponent,
-    title: `Home`,
+    title: `Home | {{username}}`,
     canActivate: [loginGuard],
   },
   {
     path: 'camera',
     component: CameraComponent,
-    title: `Camera`,
+    title: `Camera | {{username}}`,
     canActivate: [loginGuard],
   },
   {
     path: 'display',
     component: DisplayComponent,
-    title: `Display`,
+    title: `Display | {{username}}`,
     canActivate: [loginGuard],
   },
   {
     path: 'upload',
     component: UploadComponent,
-    title: `Upload`,
+    title: `Upload | {{username}}`,
     canActivate: [loginGuard],
   },
   {
     path: 'photo',
     component: PhotoComponent,
-    title: `Photo`,
-    // canActivate: [loginGuard],
+    title: `Photo | {{username}}`,
+    canActivate: [loginGuard],
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
